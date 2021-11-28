@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  api:
+    container_name: api
+    restart: always
+    build: api/
+    env_file:
+      - .env
+    ports:
+      - "5000:5000"
+    networks:
+      - deploy_network
+
+  dashboard:
+    container_name: dashboard
+    restart: always
+    build: dashboard/
+    env_file:
+      - .env
+    depends_on:
+      - api
+    ports:
+      - "8501:8501"
+    networks:
+      - deploy_network
+
+networks:
+  deploy_network:
+    driver: bridge
