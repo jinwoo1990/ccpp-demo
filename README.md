@@ -54,7 +54,7 @@ AWS
 4. Git clone
 - `git clone https://github.com/jinwoo1990/ccpp-demo`
 
-5. .env 파일 생성
+5. `.env` 파일 생성
 ```shell
 # Custom env
 PREPROCESSING_OBJECTS_PATH=/api/model/preprocessing_objects_211129_0103.pkl
@@ -66,7 +66,7 @@ EXPLAINER_PATH=/api/model/XGB_explainer_211129_0103.pkl
 - Git 에 포함되어 있지 않은 환경변수 파일로 추가 생성 필요
 - model 새로 생성하면 바라보는 파일명 환경변수 변경 (추후 ml-streamlit-app 처럼 db로 처리하거나 mlflow 기능 활용 가능 )
 
-6`sh init.sh` 로 컨테이너 초기화 및 기본 데이터 불러오기
+6. `sh init.sh` 로 컨테이너 초기화 및 기본 데이터 불러오기
 - `docker-compose up --build -d` 실행됨
 
 
