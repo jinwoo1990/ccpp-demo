@@ -1,5 +1,7 @@
 # CCPP Streamlit Demo App
 
+Temporary Address: http://13.209.234.231:8501/
+
 ## 기술 요소
 docker
 - docker-compose (container management)
