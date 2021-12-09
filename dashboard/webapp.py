@@ -105,7 +105,7 @@ def streamlit_main():
         st.subheader('Input Features')
         features_selected = ['AT', 'V', 'AP', 'RH']
 
-        model_input_expander = st.expander('Model Input')
+        model_input_expander = st.beta_expander('Model Input')
         model_input_expander.write('Input Features: ')
         model_input_expander.text(", ".join(list(raw_input_data[0].keys())))
         model_input_expander.json(raw_input_data[0])
@@ -132,7 +132,7 @@ def streamlit_main():
         # st.pyplot(fig)
 
         # expander 형식으로 shap detail 값 표시
-        shap_detail_expander = st.expander('Shap Detail')
+        shap_detail_expander = st.beta_expander('Shap Detail')
         for key, item in zip(features_selected, shap_values):
             shap_detail_expander.text('%s: %s' % (key, item))
 
