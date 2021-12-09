@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 
 
 # 모델 API endpoint
-url = 'http://api:5000'  # TODO: 이걸로 수정
+url = 'http://api:5000'  # TODO: Docker 배포 시 설정
 # url = 'http://127.0.0.1:5000'
 predict_endpoint = '/model/predict/'
 shap_endpoint = '/model/calculate-shap-values/'
@@ -40,10 +40,10 @@ def get_raw_input_features():
 
     :return: json 형식의 raw input 데이터
     """
-    raw_features = {"AP": st.sidebar.slider('Atomospheric Pressure', 990.0, 1040.0),
-                    "AT": st.sidebar.slider('Ambient Temperature', 1.0, 38.0),
-                    "RH": st.sidebar.slider('Relative Humidity', 20.0, 105.0),
-                    "V": st.sidebar.slider('Vaccum', 25.0, 85.0)
+    raw_features = {"AP": st.sidebar.slider('Atomospheric Pressure', 990.0, 1040.0, (990.0 + 1040.0)/2),
+                    "AT": st.sidebar.slider('Ambient Temperature', 1.0, 38.0, (1.0 + 38.0)/2),
+                    "RH": st.sidebar.slider('Relative Humidity', 20.0, 105.0, (20.0 + 105.0)/2),
+                    "V": st.sidebar.slider('Vaccum', 25.0, 85.0, (25.0 + 85.0)/2)
                     }
 
     return [raw_features]
@@ -78,14 +78,14 @@ def streamlit_main():
 
     :return: None
     """
-    st.title('CCPP Power Output Prediction Demo')
+    st.title('CCPP Power Output Predictor')
     # 화면 오른쪽에 last updated 표시
     components.html(
         f'''<p style="text-align:right; font-family:'IBM Plex Sans', sans-serif; font-size:0.8rem; color:#585858";>\
             Last Updated: {last_updated}</p>''', height=30)
 
     # sidebar input 값 선택 UI 생성
-    st.sidebar.header('User Input Features')
+    st.sidebar.header('User Menu')
     user_input_data = get_user_input_features()
 
     st.sidebar.header('Raw Input Features')
@@ -96,12 +96,16 @@ def streamlit_main():
         results = requests.post(url + predict_endpoint, json=raw_input_data)
         results = json.loads(results.text)
 
-        # expander 형식으로 model input 표시
-        st.header('Input Features')
-        # features_selected = [feat for feat in results.keys() if feat != 'prediction']  # TODO: 이렇게 하면 순서 꼬임
-        features_selected = ['AT', 'V', 'AP', 'RH']  # TODO: features_selected 도 객체로 받아올 생각
+        # 예측 결과 표시
+        st.subheader('Results')
+        prediction = results["prediction"]
+        st.write("Prediction: ", round(prediction, 2))
 
-        model_input_expander = st.beta_expander('Model Input')
+        # expander 형식으로 model input 표시
+        st.subheader('Input Features')
+        features_selected = ['AT', 'V', 'AP', 'RH']
+
+        model_input_expander = st.expander('Model Input')
         model_input_expander.write('Input Features: ')
         model_input_expander.text(", ".join(list(raw_input_data[0].keys())))
         model_input_expander.json(raw_input_data[0])
@@ -109,11 +113,6 @@ def streamlit_main():
         model_input_expander.text(", ".join(features_selected))
         selected_features_values = OrderedDict((k, results[k]) for k in features_selected)
         model_input_expander.json(selected_features_values)
-
-        # 예측 결과 표시
-        st.header('Results')
-        prediction = results["prediction"]
-        st.write("Prediction: ", int(prediction))
 
         # shap 값 계산
         shap_results = requests.post(url + shap_endpoint, json=raw_input_data)
@@ -123,7 +122,7 @@ def streamlit_main():
         shap_values = np.array(shap_results['shap_values'])
 
         # shap force plot 표시
-        st.subheader('Model Prediction Interpretation Plot')
+        st.subheader('Interpretation Plot')
         draw_shap_plot(base_value, shap_values, pd.DataFrame(raw_input_data)[features_selected])
 
         # shap feature importance plot 표시
@@ -133,7 +132,7 @@ def streamlit_main():
         # st.pyplot(fig)
 
         # expander 형식으로 shap detail 값 표시
-        shap_detail_expander = st.beta_expander('Shap Detail')
+        shap_detail_expander = st.expander('Shap Detail')
         for key, item in zip(features_selected, shap_values):
             shap_detail_expander.text('%s: %s' % (key, item))
 
