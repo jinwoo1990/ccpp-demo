@@ -124,4 +124,10 @@ venv.bak/
 .dmypy.json
 dmypy.json
 
+# mlflow
+# 나중에 추가 여부 생각
+mlruns/
+mlartifacts/
+outputs/
+
 # custom
