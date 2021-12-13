@@ -39,3 +39,4 @@ Werkzeug==2.0.1
 zipp==3.5.0
 xgboost==1.4.2
 tensorflow==2.7.0
+mlflow==1.22.0
