@@ -17,6 +17,25 @@ AWS
 
 ## 사용 방법
 
+### 준비사항
+
+1. `.env` 파일 생성
+```shell
+# Custom env
+PREPROCESSING_OBJECTS_PATH=/api/model/preprocessing_objects_211129_0103.pkl
+MODEL_PATH=/api/model/XGB_211129_0103.pkl
+MODEL_TYPE=tree
+BACKGROUND_DATA_PATH=/api/model/background_data_211129_0103.pkl
+EXPLAINER_PATH=/api/model/XGB_explainer_211129_0103.pkl
+```
+- Git 에 포함되어 있지 않은 환경변수 파일로 추가 생성 필요
+- model 새로 생성하면 바라보는 파일명 환경변수 변경 (추후 ml-streamlit-app 처럼 db로 처리하거나 mlflow 기능 활용 가능)
+
+2. logs 디렉토리 생성
+- 로컬로 돌릴 때 .log 파일 .gitignore 에 등록되어 있으므로 logs 디렉토리 생성 필요
+- Docker 로 띄울 때는 `RUN mkdir -p /api/logs` 처럼 선언되어있어 문제 없음
+
+
 ### 배포
 
 1. AWS Lightsail Instance 생성
@@ -56,19 +75,7 @@ AWS
 4. Git clone
 - `git clone https://github.com/jinwoo1990/ccpp-demo`
 
-5. `.env` 파일 생성
-```shell
-# Custom env
-PREPROCESSING_OBJECTS_PATH=/api/model/preprocessing_objects_211129_0103.pkl
-MODEL_PATH=/api/model/XGB_211129_0103.pkl
-MODEL_TYPE=tree
-BACKGROUND_DATA_PATH=/api/model/background_data_211129_0103.pkl
-EXPLAINER_PATH=/api/model/XGB_explainer_211129_0103.pkl
-```
-- Git 에 포함되어 있지 않은 환경변수 파일로 추가 생성 필요
-- model 새로 생성하면 바라보는 파일명 환경변수 변경 (추후 ml-streamlit-app 처럼 db로 처리하거나 mlflow 기능 활용 가능 )
-
-6. `sh init.sh` 로 컨테이너 초기화 및 기본 데이터 불러오기
+5. `sh init.sh` 로 컨테이너 초기화 및 기본 데이터 불러오기
 - `docker-compose up --build -d` 실행됨
 
 
