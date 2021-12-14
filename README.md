@@ -83,12 +83,26 @@ EXPLAINER_PATH=/api/model/XGB_explainer_211129_0103.pkl
 어플리케이션 접속: `https://<domain-ip>:8501/`
 
 어플리케이션 멈추기: `docker-compose stop`
+
 어플리케이션 다시 띄우기: `docker-compose start`
 
 어플리케이션 삭제: `docker-compose down`
+
 어플리케이션 다시 만들기: `sh init.sh`
 
 
 ## Version
 
 ### Version 1.0.0
+Jupyter notebook 에서 만든 모델을 바탕으로 작동하는 데모 어플리케이션 개발
+
+### Version 1.0.1 (개발중)
+기본 시스템 로깅 기능 구현 (python 내장 logging 모듈 사용)
+
+mlflow 를 활용한 모델 학습 파이프라인 개발 및 정확도 트랙킹 기능 구현
+
+추가 사용 방법
+- api 디렉토리로 이동
+- `mlflow ui` 로 mlflow ui 띄우기
+- `python train.py <sys.argv[1]> <sys.argv[2]> <...>` 로 정의된 파라미터를 넘겨 모델 학습
+- 127.0.0.1:5000 (로컬에서 띄웠을 때 기본 주소, 설정에 따라 다를 수 있음) 에서 새로 고침 후 모델 학습 결과 확인
